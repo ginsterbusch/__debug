@@ -3,7 +3,7 @@
  * Plugin Name: __debug()
  * Description: Minimalistic debug functions for WordPress. Main course: __debug
  * Plugin URI: http://usability-idealist.de/
- * Version: 1.2
+ * Version: 1.3
  * Author: Fabian Wolf
  * Author URI: http://usability-idealist.de/
  * License: GNU GPL v3
@@ -23,3 +23,7 @@ if( !function_exists('__debug') ) {
 	}
 }
 
+if( !class_exists('__debug') ) {
+	require_once( plugin_dir_path(__FILE__) . 'debug.class.php');
+	
+}
