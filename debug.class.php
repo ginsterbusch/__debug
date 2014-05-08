@@ -66,8 +66,5 @@ class __debug {
 		
 		return $return;
 	}
-	
-	
-
 }
  
