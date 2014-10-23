@@ -4,21 +4,24 @@
  *
  * @author Fabian Wolf
  * @link http://usability-idealist.de/
- * @version 1.4-full
+ * @version 1.4-light
  * @license GNU GPL v3
  * 
  * Features:
  * - class acts as a namespace
  * - debug output is displayed only to logged in users with the manage_options capability (may be optionally changed or disabled)
+ * 
+ * Removed features (due to WordPress Theme Repository rules; only available in the full class at @link https://github.com/ginsterbusch/__debug or with the cc2 premium extension):
  * - optionally writes data into a remote-read protected logfile (default location: wp_upload_dir)
  */
 
-if( !class_exists('__debug' ) ) :
+if( !class_exists( '__debug' ) ) :
 
 class __debug {
 	protected $params, $title;
 	
 	public static $version = 1.4;
+	public static $release = 'light';
 	
 	function __construct( $data, $title = 'Debug:', $arrParams = false ) {
 	
@@ -31,13 +34,13 @@ class __debug {
 		);
 		
 		// read upload_dir ONLY if logging is ENABLED
-		if( !empty($this->params->log_data) ) {
+		if( !empty($this->params->log) ) {
 		
 			if( !empty( $arrParams['log_file'] ) ) {
 				$this->params->log_file = $arrParams['log_file'];
 			} else {
 				$upload_dir = wp_upload_dir();
-				$this->params->log_file = trailingslashit( $upload_dir['basedir'] ) . '__debug.log.php';
+				$this->params->log_file = trailingslashit( $upload_dir['basedir'] ) . '__debug.log';
 			}
 		}
 		
@@ -78,9 +81,10 @@ class __debug {
 	}
 	
 	protected function _log_data( $data, $title = false ) {
+		
+		
 		if( !empty( $this->params->log_file ) ) {
-			
-			
+
 			$arrLogEntry = array( 'title' => date('Y-m-d H:i:s') );
 			
 			if( !empty( $title ) ) {
@@ -91,10 +95,28 @@ class __debug {
 			
 			$arrLogEntry['data'] = print_r( $data, true );
 			
-			$strLogEntry = '<logentry>' . "\n" . implode( "\n", $arrLogEntry ) . '</logentry>\n';
+			$strLogEntry = "<logentry>\n" . implode( "\n", $arrLogEntry ) . "</logentry>\n";
 							
+
 			
-			file_put_contents( $this->params->log_file, $strLogEntry, FILE_APPEND );
+			//$result = file_put_contents( $this->params->log_file, $strLogEntry, FILE_APPEND );
+			$arrWriteParams = array( 'file' => $this->params->log_file, 'data' => $strLogEntry, 'mode' => FILE_APPEND );
+			$result = apply_filters('__debug_log_write', $arrWriteParams );
+			
+			if( $result == $arrWriteParams ) { // debug plugin / premium plugin not active
+				$result = false;
+			}
+			
+			error_log( 'Log entry write'); // backup into regular error log
+			
+			if( $result === false ) {
+				$strMinifiedLogEntry = str_replace( array( "\r\n", "\n"), '[lnbr]', $strLogEntry );
+				error_log( 'Could not write ' . $this->params->log_file . '. Possible missing file access rights?' );
+				error_log( __METHOD__ . ': Original log entry: ' . str_replace( $strMinifiedLogEntry ) );
+			}
+			
+		} else {
+			error_log( 'No log file given.');
 		}
 	}
 	
@@ -122,5 +144,5 @@ class __debug {
 	}
 }
 
-endif;
+endif; // class exists
  
