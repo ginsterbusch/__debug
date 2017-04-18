@@ -4,7 +4,7 @@
  *
  * @author Fabian Wolf
  * @link http://usability-idealist.de/
- * @version 1.4-full
+ * @version 1.5-full
  * @license GNU GPL v3
  * 
  * Features:
@@ -18,7 +18,7 @@ if( !class_exists('__debug' ) ) :
 class __debug {
 	protected $params, $title;
 	
-	public static $version = 1.4;
+	public static $version = 1.5;
 	
 	function __construct( $data, $title = 'Debug:', $arrParams = false ) {
 	

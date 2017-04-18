@@ -1,0 +1,30 @@
+.theme__debug .debug-title {
+		font-size: 1.3em;
+		font-weight: bold;
+	}
+		
+	.theme__debug .debug-content {
+		font-family: Consolas, "Andale Mono WT", "Andale Mono", "Droid Sans Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+		background-color: #333;
+		color: #fff;
+		font-size: 1.15em;
+		padding: 0.5em;
+	}
+	
+	
+	.theme__debug .debug-content.hide-debug-content {
+		max-height: 11em;
+		overflow: hidden;
+		cursor: pointer;
+	}
+
+	.no-js .theme__debug .debug-content:hover,
+	.no-js .theme__debug .debug-content:focus,
+	.theme__debug .debug-content.active,
+	.theme__debug .debug-content.display-debug-content
+	{
+		max-height: 100%;
+		overflow: auto;
+		cursor: default;
+	}
+	
